@@ -1,0 +1,471 @@
+[
+  {
+    "case": "best_fit",
+    "input": {
+      "text": "Recommend highly rated vegetarian biryani in Indiranagar under ₹300 within 30 minutes"
+    },
+    "output": {
+      "status": "recommended",
+      "understood_request": {
+        "intent": "decision",
+        "preferences": {
+          "domain": "food",
+          "dish": "biryani",
+          "cuisine": null,
+          "dietary_preference": "vegetarian",
+          "location": "indiranagar",
+          "budget": {
+            "amount": 300.0,
+            "operator": "lt",
+            "currency": "INR"
+          },
+          "delivery_limit": {
+            "minutes": 30,
+            "operator": "lte"
+          },
+          "min_rating": null,
+          "prefer_high_rating": true,
+          "priority": null,
+          "unsupported_constraints": []
+        }
+      },
+      "intent_details": {
+        "raw_intent": "decision",
+        "raw_probability": 0.7075979832124754,
+        "clarification_threshold": 0.25,
+        "reason": "explicit_non_action_request"
+      },
+      "recommendation": {
+        "id": "food_002",
+        "restaurant_name": "Garden Pot",
+        "dish_name": "Vegetable Biryani",
+        "cuisine": "Indian",
+        "dietary_type": "vegetarian",
+        "price_inr": 270.0,
+        "rating": 4.7,
+        "delivery_minutes": 24,
+        "location": "Indiranagar"
+      },
+      "options": [
+        {
+          "id": "food_002",
+          "restaurant_name": "Garden Pot",
+          "dish_name": "Vegetable Biryani",
+          "cuisine": "Indian",
+          "dietary_type": "vegetarian",
+          "price_inr": 270.0,
+          "rating": 4.7,
+          "delivery_minutes": 24,
+          "location": "Indiranagar"
+        },
+        {
+          "id": "food_006",
+          "restaurant_name": "Green Spoon",
+          "dish_name": "Vegetable Biryani",
+          "cuisine": "Indian",
+          "dietary_type": "vegan",
+          "price_inr": 260.0,
+          "rating": 4.5,
+          "delivery_minutes": 27,
+          "location": "Indiranagar"
+        },
+        {
+          "id": "food_001",
+          "restaurant_name": "Saffron Table",
+          "dish_name": "Vegetable Biryani",
+          "cuisine": "Indian",
+          "dietary_type": "vegetarian",
+          "price_inr": 200.0,
+          "rating": 4.0,
+          "delivery_minutes": 22,
+          "location": "Indiranagar"
+        }
+      ],
+      "ranking": [
+        {
+          "option_id": "food_002",
+          "score": 0.865,
+          "rating_component": 0.752,
+          "delivery_component": 0.09,
+          "price_component": 0.023
+        },
+        {
+          "option_id": "food_006",
+          "score": 0.8265,
+          "rating_component": 0.72,
+          "delivery_component": 0.0825,
+          "price_component": 0.024
+        },
+        {
+          "option_id": "food_001",
+          "score": 0.765,
+          "rating_component": 0.64,
+          "delivery_component": 0.095,
+          "price_component": 0.03
+        }
+      ],
+      "explanation": "Vegetable Biryani from Garden Pot in Indiranagar; matches your vegetarian requirement; costs ₹270, below your ₹300 limit; has a mock restaurant rating of 4.7/5; has an estimated delivery time of 24 minutes; is within your 30-minute delivery limit. Ranked first among 3 eligible options using the documented weighted scoring policy. Runner-up: Vegetable Biryani from Green Spoon in Indiranagar (₹260, restaurant rating 4.5/5, estimated 27 minutes).",
+      "clarification_question": null,
+      "warnings": []
+    }
+  },
+  {
+    "case": "discovery_missing_budget",
+    "input": {
+      "text": "Show vegetarian pizza"
+    },
+    "output": {
+      "status": "options_found",
+      "understood_request": {
+        "intent": "discovery",
+        "preferences": {
+          "domain": "food",
+          "dish": "pizza",
+          "cuisine": null,
+          "dietary_preference": "vegetarian",
+          "location": null,
+          "budget": null,
+          "delivery_limit": null,
+          "min_rating": null,
+          "prefer_high_rating": null,
+          "priority": null,
+          "unsupported_constraints": []
+        }
+      },
+      "intent_details": {
+        "raw_intent": "decision",
+        "raw_probability": 0.3591897333077361,
+        "clarification_threshold": 0.25,
+        "reason": "explicit_non_action_request"
+      },
+      "recommendation": null,
+      "options": [
+        {
+          "id": "food_009",
+          "restaurant_name": "Basil Corner",
+          "dish_name": "Margherita Pizza",
+          "cuisine": "Italian",
+          "dietary_type": "vegetarian",
+          "price_inr": 240.0,
+          "rating": 4.2,
+          "delivery_minutes": 25,
+          "location": "Indiranagar"
+        },
+        {
+          "id": "food_010",
+          "restaurant_name": "Plant Plate",
+          "dish_name": "Vegetable Pizza",
+          "cuisine": "Italian",
+          "dietary_type": "vegan",
+          "price_inr": 310.0,
+          "rating": 4.6,
+          "delivery_minutes": 32,
+          "location": "Indiranagar"
+        },
+        {
+          "id": "food_008",
+          "restaurant_name": "Clay Oven",
+          "dish_name": "Paneer Pizza",
+          "cuisine": "Italian",
+          "dietary_type": "vegetarian",
+          "price_inr": 290.0,
+          "rating": 4.4,
+          "delivery_minutes": 30,
+          "location": "Indiranagar"
+        },
+        {
+          "id": "food_019",
+          "restaurant_name": "Basil Corner",
+          "dish_name": "Margherita Pizza",
+          "cuisine": "Italian",
+          "dietary_type": "vegetarian",
+          "price_inr": 260.0,
+          "rating": 4.2,
+          "delivery_minutes": 28,
+          "location": "Koramangala"
+        },
+        {
+          "id": "food_026",
+          "restaurant_name": "Clay Oven",
+          "dish_name": "Paneer Pizza",
+          "cuisine": "Italian",
+          "dietary_type": "vegetarian",
+          "price_inr": 320.0,
+          "rating": 4.4,
+          "delivery_minutes": 33,
+          "location": "Whitefield"
+        }
+      ],
+      "ranking": [
+        {
+          "option_id": "food_009",
+          "score": 0.72783333,
+          "rating_component": 0.504,
+          "delivery_component": 0.14583333,
+          "price_component": 0.078
+        },
+        {
+          "option_id": "food_010",
+          "score": 0.72566667,
+          "rating_component": 0.552,
+          "delivery_component": 0.11666667,
+          "price_component": 0.057
+        },
+        {
+          "option_id": "food_008",
+          "score": 0.716,
+          "rating_component": 0.528,
+          "delivery_component": 0.125,
+          "price_component": 0.063
+        },
+        {
+          "option_id": "food_019",
+          "score": 0.70933333,
+          "rating_component": 0.504,
+          "delivery_component": 0.13333333,
+          "price_component": 0.072
+        },
+        {
+          "option_id": "food_026",
+          "score": 0.6945,
+          "rating_component": 0.528,
+          "delivery_component": 0.1125,
+          "price_component": 0.054
+        }
+      ],
+      "explanation": "Found 5 options satisfying all extracted constraints, ordered by the documented ranking policy.",
+      "clarification_question": null,
+      "warnings": [
+        "No delivery locality was provided; results span mock locality scenarios."
+      ]
+    }
+  },
+  {
+    "case": "information",
+    "input": {
+      "text": "How do I place an order?"
+    },
+    "output": {
+      "status": "information",
+      "understood_request": {
+        "intent": "information",
+        "preferences": {
+          "domain": null,
+          "dish": null,
+          "cuisine": null,
+          "dietary_preference": null,
+          "location": null,
+          "budget": null,
+          "delivery_limit": null,
+          "min_rating": null,
+          "prefer_high_rating": null,
+          "priority": null,
+          "unsupported_constraints": []
+        }
+      },
+      "intent_details": {
+        "raw_intent": "information",
+        "raw_probability": 0.6662182011410842,
+        "clarification_threshold": 0.25,
+        "reason": "model_prediction"
+      },
+      "recommendation": null,
+      "options": [],
+      "ranking": [],
+      "explanation": "This prototype can understand requests and recommend mock food options. It cannot place orders, modify carts, make payments, or execute other transactions.",
+      "clarification_question": null,
+      "warnings": []
+    }
+  },
+  {
+    "case": "action_not_executed",
+    "input": {
+      "text": "Please order a pizza"
+    },
+    "output": {
+      "status": "unsupported_action",
+      "understood_request": {
+        "intent": "action",
+        "preferences": {
+          "domain": "food",
+          "dish": "pizza",
+          "cuisine": null,
+          "dietary_preference": null,
+          "location": null,
+          "budget": null,
+          "delivery_limit": null,
+          "min_rating": null,
+          "prefer_high_rating": null,
+          "priority": null,
+          "unsupported_constraints": []
+        }
+      },
+      "intent_details": {
+        "raw_intent": "action",
+        "raw_probability": 0.4442569599314927,
+        "clarification_threshold": 0.25,
+        "reason": "explicit_action_request"
+      },
+      "recommendation": null,
+      "options": [],
+      "ranking": [],
+      "explanation": "An explicit execution request was detected. This prototype cannot place orders, modify carts, reserve tables, or make payments. Nothing was executed.",
+      "clarification_question": null,
+      "warnings": []
+    }
+  },
+  {
+    "case": "clarification",
+    "input": {
+      "text": "Help me"
+    },
+    "output": {
+      "status": "clarification",
+      "understood_request": {
+        "intent": "clarification",
+        "preferences": {
+          "domain": null,
+          "dish": null,
+          "cuisine": null,
+          "dietary_preference": null,
+          "location": null,
+          "budget": null,
+          "delivery_limit": null,
+          "min_rating": null,
+          "prefer_high_rating": null,
+          "priority": null,
+          "unsupported_constraints": []
+        }
+      },
+      "intent_details": {
+        "raw_intent": "clarification",
+        "raw_probability": 0.5626534731344929,
+        "clarification_threshold": 0.25,
+        "reason": "model_prediction"
+      },
+      "recommendation": null,
+      "options": [],
+      "ranking": [],
+      "explanation": "The request needs clarification before options can be evaluated.",
+      "clarification_question": "What food would you like, and are there any required preferences I should use?",
+      "warnings": []
+    }
+  },
+  {
+    "case": "ordering_question_not_authorization",
+    "input": {
+      "text": "What should I order?"
+    },
+    "output": {
+      "status": "clarification",
+      "understood_request": {
+        "intent": "clarification",
+        "preferences": {
+          "domain": null,
+          "dish": null,
+          "cuisine": null,
+          "dietary_preference": null,
+          "location": null,
+          "budget": null,
+          "delivery_limit": null,
+          "min_rating": null,
+          "prefer_high_rating": null,
+          "priority": null,
+          "unsupported_constraints": []
+        }
+      },
+      "intent_details": {
+        "raw_intent": "information",
+        "raw_probability": 0.4235361786168242,
+        "clarification_threshold": 0.25,
+        "reason": "unresolved_preferences"
+      },
+      "recommendation": null,
+      "options": [],
+      "ranking": [],
+      "explanation": "There is not enough information to identify a supported food request.",
+      "clarification_question": "What food or cuisine would you like?",
+      "warnings": []
+    }
+  },
+  {
+    "case": "no_match",
+    "input": {
+      "text": "Recommend vegetarian biryani under ₹50"
+    },
+    "output": {
+      "status": "no_match",
+      "understood_request": {
+        "intent": "decision",
+        "preferences": {
+          "domain": "food",
+          "dish": "biryani",
+          "cuisine": null,
+          "dietary_preference": "vegetarian",
+          "location": null,
+          "budget": {
+            "amount": 50.0,
+            "operator": "lt",
+            "currency": "INR"
+          },
+          "delivery_limit": null,
+          "min_rating": null,
+          "prefer_high_rating": null,
+          "priority": null,
+          "unsupported_constraints": []
+        }
+      },
+      "intent_details": {
+        "raw_intent": "decision",
+        "raw_probability": 0.7942446701707293,
+        "clarification_threshold": 0.25,
+        "reason": "explicit_non_action_request"
+      },
+      "recommendation": null,
+      "options": [],
+      "ranking": [],
+      "explanation": "No catalogue option satisfies every explicit constraint. Counts can overlap: budget: 30 excluded; dietary preference: 6 excluded; dish: 15 excluded.",
+      "clarification_question": "Which requirement, if any, would you like to change?",
+      "warnings": []
+    }
+  },
+  {
+    "case": "unavailable_information",
+    "input": {
+      "text": "Recommend organic pizza"
+    },
+    "output": {
+      "status": "unsupported_constraint",
+      "understood_request": {
+        "intent": "decision",
+        "preferences": {
+          "domain": "food",
+          "dish": "pizza",
+          "cuisine": null,
+          "dietary_preference": null,
+          "location": null,
+          "budget": null,
+          "delivery_limit": null,
+          "min_rating": null,
+          "prefer_high_rating": null,
+          "priority": null,
+          "unsupported_constraints": [
+            "organic status: organic"
+          ]
+        }
+      },
+      "intent_details": {
+        "raw_intent": "decision",
+        "raw_probability": 0.40404783502562003,
+        "clarification_threshold": 0.25,
+        "reason": "explicit_non_action_request"
+      },
+      "recommendation": null,
+      "options": [],
+      "ranking": [],
+      "explanation": "The mock catalogue cannot verify or support: organic status: organic. No option is recommended.",
+      "clarification_question": "Would you like to revise these requirements?",
+      "warnings": []
+    }
+  }
+]

@@ -4,11 +4,13 @@ An explainable food recommendation system being built for the FLOUNA ML Intern t
 
 The goal is to understand a natural-language request, extract explicitly stated preferences, evaluate mock food options, and explain a best-fit recommendation.
 
+Start with the [live demo guide](docs/DEMO.md), [design decisions](docs/DESIGN.md), and [complete sample inputs and outputs](examples/sample_io.json). The project runs locally with no API keys.
+
 ## Current status
 
 The project includes a FastAPI interface with interactive documentation, automatic intent classification, five intent routes, shared schemas, 30 fictional food options, reproducible recommendations, a command-line demo, and 150 labelled requests with frozen splits. Training, validation, and final test evaluation are implemented.
 
-## Planned approach
+## Approach
 
 1. Classify requests as Information, Discovery, Decision, Action, or Clarification using TF-IDF and Logistic Regression.
 2. Extract explicit preferences using regular expressions and small keyword dictionaries. Missing values remain unknown.
@@ -41,8 +43,11 @@ data/                 Mock catalogue and labelled requests
 scripts/              Training and evaluation scripts
 tests/                Behaviour and edge-case tests
 reports/              Evaluation metrics and confusion matrix
+examples/             Captured complete sample inputs and outputs
+docs/                 Demo guide, design rationale, and tool disclosure
 requirements.txt      Runtime dependencies
 requirements-dev.txt  Development and evaluation dependencies
+requirements-evaluated.txt  Exact package snapshot from the evaluated environment
 ```
 
 See [data/README.md](data/README.md) for catalogue provenance, field definitions, dietary conventions, supported locations, and constraint semantics. Modules will be added when their functionality is implemented.
@@ -191,3 +196,16 @@ The [validation report](reports/validation.json) separately records all candidat
 ## AI assistance and data sources
 
 OpenAI Codex assisted with the project plan, repository setup, schemas, synthetic data authorship and annotation, split preparation, extraction, ranking, intent classification and safeguards, training and validation, command-line demo, API integration, documentation, and tests. Provenance and limitations are documented in `data/README.md` and `data/REQUESTS.md`. Labels were AI-authored and AI-reviewed, not independently human-annotated. The runtime uses no external AI API or production service. Further AI usage will be documented as components are added.
+
+See [the complete libraries, models, data, and AI disclosure](docs/TOOLS.md). Exact installed versions are recorded in `requirements-evaluated.txt`; use the bounded requirements files for normal setup.
+
+## Submission materials
+
+- Source code and setup: this repository and README.
+- Dataset and generation method: `data/options.json`, `data/requests.jsonl`, `data/splits.json`, and their documentation.
+- Evaluation: `reports/README.md`, JSON metrics and per-request predictions, and the PNG confusion matrix.
+- Samples: `examples/sample_io.json` and seven API documentation examples.
+- Tests: run `python -m pytest -q` (166 checks passed in the evaluated environment).
+- Live demo: follow `docs/DEMO.md` to present the interactive local API; no prerecorded video or public deployment is included.
+- Limitations and improvements: this README, `reports/README.md`, and `docs/DESIGN.md`.
+- Libraries, models, APIs, datasets, and AI assistance: `docs/TOOLS.md` and the requirements files.
