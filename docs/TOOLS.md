@@ -10,6 +10,7 @@
 | FastAPI | API routing and OpenAPI documentation |
 | Pydantic | Request, response, catalogue, and label validation |
 | Uvicorn | Local API server |
+| Streamlit | Browser interface, cached demo model, and optional Community Cloud deployment |
 | pytest | Unit and API integration tests |
 | HTTPX and FastAPI TestClient | In-process HTTP tests |
 | Matplotlib | Exported test confusion matrix |
@@ -17,7 +18,7 @@
 | Git and GitHub | Version control and repository delivery |
 | OpenAI Codex | Planning, implementation, synthetic data authorship and review, tests, documentation, and interpretation of results |
 
-Direct dependency ranges are in `requirements.txt` and `requirements-dev.txt`. `requirements-evaluated.txt` captures the exact installed packages used for this run, including transitive dependencies. The recorded environment used Python 3.14.2 on macOS; that exact package snapshot requires a compatible Python/platform. For another supported Python version, use the bounded dependency files and report any resulting metric differences. Core numerical versions and data/model hashes also appear in evaluation metadata.
+Direct dependency ranges are in `requirements.txt` and `requirements-dev.txt`. `requirements-evaluated.txt` captures the exact installed packages used for the original numerical evaluation, including transitive dependencies; it predates the Streamlit addition. Streamlit 1.67.0 was subsequently tested without changing those numerical package versions. The recorded environment used Python 3.14.2 on macOS; that exact package snapshot requires a compatible Python/platform. For another supported Python version, use the bounded dependency files and report any resulting metric differences. Core numerical versions and data/model hashes also appear in evaluation metadata.
 
 ## Models APIs and data
 

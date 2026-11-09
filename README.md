@@ -6,9 +6,11 @@ The goal is to understand a natural-language request, extract explicitly stated 
 
 Start with the [live demo guide](docs/DEMO.md), [design decisions](docs/DESIGN.md), and [complete sample inputs and outputs](examples/sample_io.json). The project runs locally with no API keys.
 
+For a simple browser interface, run `python -m streamlit run streamlit_app.py`. See [Streamlit setup and deployment](docs/STREAMLIT.md) for a shareable Community Cloud deployment. This interface uses the same frozen processing pipeline; it needs no separately running API.
+
 ## Current status
 
-The project includes a FastAPI interface with interactive documentation, automatic intent classification, five intent routes, shared schemas, 30 fictional food options, reproducible recommendations, a command-line demo, and 150 labelled requests with frozen splits. Training, validation, and final test evaluation are implemented.
+The project includes Streamlit and FastAPI interfaces, automatic intent classification, five intent routes, shared schemas, 30 fictional food options, reproducible recommendations, a command-line demo, and 150 labelled requests with frozen splits. Training, validation, and final test evaluation are implemented.
 
 ## Approach
 
@@ -205,7 +207,9 @@ See [the complete libraries, models, data, and AI disclosure](docs/TOOLS.md). Ex
 - Dataset and generation method: `data/options.json`, `data/requests.jsonl`, `data/splits.json`, and their documentation.
 - Evaluation: `reports/README.md`, JSON metrics and per-request predictions, and the PNG confusion matrix.
 - Samples: `examples/sample_io.json` and seven API documentation examples.
-- Tests: run `python -m pytest -q` (166 checks passed in the evaluated environment).
+- Tests: run `python -m pytest -q`; the Streamlit addition includes presentation-layer tests alongside the 166 original checks.
 - Live demo: follow `docs/DEMO.md` to present the interactive local API; no prerecorded video or public deployment is included.
 - Limitations and improvements: this README, `reports/README.md`, and `docs/DESIGN.md`.
 - Libraries, models, APIs, datasets, and AI assistance: `docs/TOOLS.md` and the requirements files.
+
+The Streamlit interface, deployment setup, and its tests were also created with OpenAI Codex assistance. The Streamlit layer does not change the frozen runtime or test labels.

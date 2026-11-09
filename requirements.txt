@@ -6,3 +6,6 @@ pydantic>=2.9,<3.0
 # Intent classification and model persistence
 scikit-learn>=1.5,<2.0
 joblib>=1.4,<2.0
+
+# Browser interface and Community Cloud entry point
+streamlit>=1.50,<2.0
