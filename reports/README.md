@@ -2,6 +2,8 @@
 
 The frozen 30-request test split was evaluated after model selection and validation-driven policy changes were complete. Runtime rules, model parameters, gold labels, and split assignments were not changed in response to test errors.
 
+A later readability cleanup replaced the generic constraint loops with direct dish, cuisine, location, budget, and delivery checks. Complete responses for all 150 labelled requests and eight saved examples were compared against the preceding committed code and were identical. Re-running evaluation also preserved every reported metric and failure. The report hashes retain the original evaluation provenance.
+
 ## Final test results
 
 | Component | Test accuracy | Macro F1 | False Actions among 24 non-Action requests |

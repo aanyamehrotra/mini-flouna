@@ -1,4 +1,4 @@
-"""Hard constraints first, deterministic scoring second, factual explanations."""
+"""Filter food options, rank matches, and explain the recommendation."""
 
 from collections import Counter
 
@@ -7,30 +7,35 @@ from app.schemas import FoodOption, Preferences, RankedOption, RecommendationRes
 
 def rejection_reasons(option: FoodOption, preferences: Preferences) -> list[str]:
     reasons = []
-    for field, actual in (
-        ("dish", option.dish_name), ("cuisine", option.cuisine), ("location", option.location),
-    ):
-        expected = getattr(preferences, field)
-        matches = expected is None or (
-            expected.casefold() == actual.casefold() if field != "dish"
-            else expected.casefold() in actual.casefold()
-        )
-        if not matches:
-            reasons.append(field)
+    if preferences.dish and preferences.dish.casefold() not in option.dish_name.casefold():
+        reasons.append("dish")
+    if preferences.cuisine and preferences.cuisine.casefold() != option.cuisine.casefold():
+        reasons.append("cuisine")
+    if preferences.location and preferences.location.casefold() != option.location.casefold():
+        reasons.append("location")
     diet = preferences.dietary_preference
     if diet and not (
         option.dietary_type == diet
         or diet == "vegetarian" and option.dietary_type == "vegan"
     ):
         reasons.append("dietary preference")
-    for bound, value, limit, label in (
-        (preferences.budget, option.price_inr,
-         preferences.budget.amount if preferences.budget else None, "budget"),
-        (preferences.delivery_limit, option.delivery_minutes,
-         preferences.delivery_limit.minutes if preferences.delivery_limit else None, "delivery time"),
-    ):
-        if bound and not (value < limit if bound.operator == "lt" else value <= limit):
-            reasons.append(label)
+    budget = preferences.budget
+    if budget:
+        within_budget = (
+            option.price_inr < budget.amount
+            if budget.operator == "lt" else option.price_inr <= budget.amount
+        )
+        if not within_budget:
+            reasons.append("budget")
+
+    delivery = preferences.delivery_limit
+    if delivery:
+        within_time = (
+            option.delivery_minutes < delivery.minutes
+            if delivery.operator == "lt" else option.delivery_minutes <= delivery.minutes
+        )
+        if not within_time:
+            reasons.append("delivery time")
     if preferences.min_rating is not None and option.rating < preferences.min_rating:
         reasons.append("minimum restaurant rating")
     return reasons

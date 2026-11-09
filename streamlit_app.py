@@ -1,4 +1,4 @@
-"""A small Streamlit presentation layer over the frozen FLOUNA pipeline."""
+"""Streamlit interface for the request-processing pipeline."""
 
 import hashlib
 import json
@@ -9,6 +9,7 @@ import streamlit as st
 from app.dataset import load_requests, load_splits
 from app.intent import IntentClassifier
 from app.pipeline import process_request
+from app.schemas import RecommendationResponse
 from scripts.train import make_model
 
 
@@ -40,7 +41,7 @@ def demo_classifier() -> IntentClassifier:
     return IntentClassifier(model, metadata["clarification_threshold"])
 
 
-def show_result(result) -> None:
+def show_result(result: RecommendationResponse) -> None:
     st.divider()
     st.caption(f"Request type: {result.understood_request.intent.title()}")
     if result.recommendation:

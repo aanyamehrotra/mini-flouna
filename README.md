@@ -1,169 +1,83 @@
 # Mini FLOUNA
 
-An explainable food recommendation system being built for the FLOUNA ML Intern technical assignment.
+A food request-understanding and recommendation system built for the FLOUNA ML Intern assignment.
 
-The goal is to understand a natural-language request, extract explicitly stated preferences, evaluate mock food options, and explain a best-fit recommendation.
+**[Open the live Streamlit app](https://mini-flouna-kvokv5gr9m899aqnzdfhvr.streamlit.app/)** · [Sample inputs and outputs](examples/sample_io.json) · [Evaluation report](reports/README.md)
 
-Start with the [live demo guide](docs/DEMO.md), [design decisions](docs/DESIGN.md), and [complete sample inputs and outputs](examples/sample_io.json). The project runs locally with no API keys.
+Enter a request such as “Recommend highly rated vegetarian biryani in Indiranagar under ₹300 within 30 minutes.” The system extracts the preferences, checks a fictional food catalogue, ranks matching options, and explains its choice. This example selects Garden Pot's ₹270 biryani, rated 4.7, with an estimated delivery time of 24 minutes.
 
-For a simple browser interface, run `python -m streamlit run streamlit_app.py`. See [Streamlit setup and deployment](docs/STREAMLIT.md) for a shareable Community Cloud deployment. This interface uses the same frozen processing pipeline; it needs no separately running API.
+## What it does
 
-## Current status
+- Identifies Information, Discovery, Decision, Action, and Clarification requests.
+- Extracts dish, cuisine, dietary preference, location, budget, delivery limit, and rating preference into validated JSON. Unstated values remain `null`.
+- Filters explicit constraints before ranking. Vegan options may satisfy vegetarian requests; vegetarian options cannot automatically satisfy vegan requests.
+- Lists options for Discovery and selects a best fit for Decision. The cheapest option does not automatically win.
+- Explains recommendations using catalogue facts and exposes score contributions.
+- Asks for missing essential details, reports no matches, and identifies requirements that the catalogue cannot verify.
+- Recognizes explicit Action requests but performs no ordering, payments, cart changes, or reservations. “What should I order?” is never treated as ordering permission.
 
-The project includes Streamlit and FastAPI interfaces, automatic intent classification, five intent routes, shared schemas, 30 fictional food options, reproducible recommendations, a command-line demo, and 150 labelled requests with frozen splits. Training, validation, and final test evaluation are implemented.
+The catalogue has 30 fictional food items across Indiranagar, Koramangala, and Whitefield. Prices are total mock prices for one serving; ratings describe restaurants; delivery times are estimates. [Catalogue definitions and source](data/README.md).
 
-## Approach
+## Run locally
 
-1. Classify requests as Information, Discovery, Decision, Action, or Clarification using TF-IDF and Logistic Regression.
-2. Extract explicit preferences using regular expressions and small keyword dictionaries. Missing values remain unknown.
-3. Filter mock food items against hard constraints, then rank eligible items using a documented scoring policy.
-4. Generate explanations directly from the extracted preferences and catalogue data.
-5. Expose the pipeline through FastAPI and evaluate it on labelled requests.
-
-The initial scope is English food requests, INR prices, a local mock catalogue, and one request at a time. Ordering and payment execution are outside the scope. Discovery and Decision requests must never be treated as permission to act. Unsupported constraints and requests with no matching options must be reported explicitly.
-
-## Setup
-
-Use Python 3.11 or newer and run these commands from the repository root:
+Python 3.11 or newer is required. Local testing used Python 3.14.2.
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements-dev.txt
-python -m pip check
+python -m streamlit run streamlit_app.py
 ```
 
-On Windows, activate the environment with `.venv\Scripts\activate` instead.
+On Windows, activate with `.venv\Scripts\activate`. Open http://localhost:8501. Installing `requirements.txt` alone is sufficient to run the app; development requirements also include testing and plotting tools.
 
-For runtime dependencies only, install `requirements.txt`. The development requirements include runtime dependencies plus testing and evaluation tools. Dependency ranges are bounded; exact versions used for the final evaluation will be recorded with the results.
+Streamlit builds and caches the small model from the 90 training requests using the configuration already selected on validation data. It checks data hashes and does not tune on startup or use test requests for fitting. No API keys, uploaded model file, or separately running API are needed.
 
-## Project structure
+### API and command line
 
-```text
-app/                  Application package
-data/                 Mock catalogue and labelled requests
-scripts/              Training and evaluation scripts
-tests/                Behaviour and edge-case tests
-reports/              Evaluation metrics and confusion matrix
-examples/             Captured complete sample inputs and outputs
-docs/                 Demo guide, design rationale, and tool disclosure
-requirements.txt      Runtime dependencies
-requirements-dev.txt  Development and evaluation dependencies
-requirements-evaluated.txt  Exact package snapshot from the evaluated environment
-```
-
-See [data/README.md](data/README.md) for catalogue provenance, field definitions, dietary conventions, supported locations, and constraint semantics. Modules will be added when their functionality is implemented.
-
-## Run the current checks
-
-```bash
-python -m pytest -q
-```
-
-These checks cover schemas, catalogue integrity, extraction, ranking, intent safeguards, and the HTTP interface. They are not held-out ML evaluation results. API tests train a temporary model from the training split, so they do not need an existing local model artifact.
-
-## Train and try the system
-
-Train once from the repository root:
+Train a local model artifact first:
 
 ```bash
 python -m scripts.train
-```
-
-This fits TF-IDF and Logistic Regression on the 90 training requests, selects regularization and a clarification threshold using only the 30 validation requests, saves the model locally to `artifacts/intent_model.joblib`, and writes `reports/validation.json`. The binary model is ignored by Git; a fresh checkout needs this training step. Only load locally generated trusted model artifacts. Restart a running app after retraining its cached model.
-
-Automatic intent examples:
-
-```bash
-python -m app "Show vegetarian pizza"
 python -m app "Recommend vegetarian pizza under ₹300"
-python -m app "How do I place an order?"
-python -m app "Please order a pizza"
-python -m app "Help me"
-```
-
-These demonstrate Discovery, Decision, Information, unsupported Action, and Clarification respectively. No ordering, payment, cart modification, or reservation operation is implemented. Information responses use a small factual FAQ about the prototype and catalogue; general food knowledge questions receive an explicit scope limitation. Information topics are not treated as user preferences.
-
-You can still use a manual intent override for debugging:
-
-```bash
-python -m app --intent decision "Highly rated vegetarian biryani in Indiranagar under ₹300 within 30 minutes"
-python -m app --intent discovery "Show vegetarian pizzas"
-python -m app --intent decision "Organic biryani"
-```
-
-The first example recommends Garden Pot's ₹270 vegetable biryani over the cheaper option. The second lists eligible options without selecting a winner. The third reports an unsupported organic requirement and returns no recommendation. Output is structured JSON including extracted preferences, eligible options, weighted score contributions, explanations, and any clarification question or warnings.
-
-`--intent` is a manual debug input, not a prediction; it is not required for normal usage. Even a manual Action override requires an explicit execution request and returns `unsupported_action`.
-
-## Run the API
-
-After installing dependencies and training the model:
-
-```bash
 python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-Open [interactive API documentation](http://127.0.0.1:8000/docs). Expand `POST /recommend`, select one of the seven examples, click **Try it out**, then **Execute**. Alternative reference documentation is available at [ReDoc](http://127.0.0.1:8000/redoc). The root URL redirects to the interactive documentation. The documentation UI loads its display assets from a public CDN; request processing uses only local data and the local model.
-
-Send a request from a terminal:
+Open http://127.0.0.1:8000/docs for seven interactive examples, or send a request:
 
 ```bash
 curl -X POST http://127.0.0.1:8000/recommend \
   -H 'Content-Type: application/json' \
-  -d '{"text":"Recommend highly rated vegetarian biryani in Indiranagar under ₹300 within 30 minutes"}'
+  -d '{"text":"Recommend vegetarian pizza under ₹300"}'
 ```
 
-Selected response fields for that example:
+`POST /recommend` accepts only `text` and returns the intent, extracted preferences, matching options, recommendation, score contributions, explanation, and any clarification question. Valid outcomes use HTTP 200 with a JSON `status`: `recommended`, `options_found`, `information`, `clarification`, `no_match`, `unsupported_action`, or `unsupported_constraint`. Invalid payloads return 422; an untrained API model returns 503 with setup instructions. `GET /health` checks process liveness.
 
-```json
-{
-  "status": "recommended",
-  "recommendation": {
-    "id": "food_002",
-    "restaurant_name": "Garden Pot",
-    "dish_name": "Vegetable Biryani",
-    "price_inr": 270.0,
-    "rating": 4.7,
-    "delivery_minutes": 24
-  }
-}
+The CLI also supports `--intent` for manual debugging; the HTTP interface always classifies automatically. Restart a running API after retraining its cached model.
+
+## Approach and code structure
+
+```text
+Request → intent classification → explicit preference extraction
+        → clarification or intent-specific response
+        → hard filters → ranking → factual explanation
 ```
 
-The full response also includes extracted preferences, intent details, eligible options, score contributions, explanation, and warnings. HTTP requests accept only `text`; the command-line debugging override is not exposed through the API.
+The classifier uses TF-IDF word unigrams/bigrams and Logistic Regression. This is fast and reproducible for the small dataset. Short rules preserve clear list/choice instructions, require explicit evidence for Action, and handle known ambiguity. Extraction uses regular expressions and dictionaries. Recommendations use deterministic scoring and template explanations. No runtime LLM or production service is used.
 
-| Endpoint or HTTP status | Meaning |
+| Location | Responsibility |
 | --- | --- |
-| `GET /health` | Liveness check returning `{"status":"ok"}`; it does not verify model readiness |
-| `POST /recommend` → `200` | Request processed; inspect the JSON `status` for the outcome |
-| `422` | Invalid JSON or request fields: missing/blank/non-string text, more than 2,000 characters, or unknown fields |
-| `503` | Model has not been trained; run `python -m scripts.train` |
+| `streamlit_app.py` | Browser interface and cached demo model |
+| `app/main.py`, `app/__main__.py` | API and CLI entry points |
+| `app/pipeline.py`, `app/intent.py`, `app/extraction.py` | Request understanding and routing |
+| `app/recommendation.py`, `app/information.py` | Filtering, ranking, explanations, and a small catalogue FAQ |
+| `app/schemas.py`, `app/catalogue.py`, `app/dataset.py` | Data validation and loading |
+| `scripts/` | Split verification, model training, and evaluation |
+| `data/`, `tests/`, `reports/`, `examples/` | Datasets, checks, evaluation evidence, and captured outputs |
 
-Valid domain outcomes are `recommended`, `options_found`, `information`, `clarification`, `no_match`, `unsupported_action`, and `unsupported_constraint`. Clarification, no-match, and unsupported outcomes are ordinary processed requests, not HTTP failures. The API adds no ordering or payment endpoint and never executes an Action request.
+### Ranking policy
 
-## Intent policy
-
-The statistical baseline is word TF-IDF unigrams/bigrams with Logistic Regression. Stop words are retained so negation is not deliberately removed. Only request text is a feature. Three C values (1, 4, 10) and three clarification thresholds (0.25, 0.35, 0.45) are compared. Selection minimizes false Actions in the final validation pipeline, then maximizes macro F1 and accuracy, with deterministic ties.
-
-The hybrid policy adds small, explicit checks:
-
-- Anchored execution requests, including polite “Can you order…” forms, produce Action; procedural questions, capability questions, and isolated mentions do not authorize Action.
-- Known prohibitions conservatively suppress Action. This may miss a genuine second action in a mixed request; it is not a general negation parser.
-- Clear list/show/find instructions preserve Discovery, while clear recommendation/choice instructions preserve Decision.
-- A raw model Action prediction without explicit execution evidence is replaced by a sufficiently supported non-Action class or Clarification.
-- Low model evidence, unknown vocabulary, conflicting preferences, and detected missing mandatory details lead to clarification. Information definitions comparing dietary labels are not treated as contradictory user diets.
-
-JSON `intent_details` exposes the raw model label, its probability, the clarification threshold, and the policy reason. The raw probability is uncalibrated; it is neither guaranteed confidence nor necessarily the probability of the final policy label. It is absent in manual debug mode.
-
-## Extraction and ranking policy
-
-The extractor supports a small English vocabulary of dishes and cuisines, explicit localities, vegetarian/vegan/non-vegetarian labels, numeric upper price and delivery bounds, numeric minimum ratings, and rating/price/speed priorities. “Under” and “below” are strict; “at most”, “up to”, and “within” are inclusive. Delivery bounds support minutes and numeric hours convertible to whole minutes. Unsupported preferences are retained as matched phrases and block recommendations. Conflicting supported values trigger clarification.
-
-Missing budget, rating, diet, and location remain `null`. Missing optional fields do not block otherwise usable food requests. Without a locality, results span mock locality scenarios and include a warning; they do not establish real delivery availability. Cuisine and locality comparisons are exact ignoring case; dish phrases match catalogue dish names. Vegan items can satisfy vegetarian requests.
-
-Every explicit supported constraint is applied before scoring. Empty results produce `no_match`, overlapping exclusion counts, and a question asking which requirement to change. Constraints are never silently relaxed.
-
-Default score:
+After enforcing all supported explicit constraints, the default score is:
 
 ```text
 0.60 × (restaurant rating / 5)
@@ -171,45 +85,51 @@ Default score:
 + 0.15 × max(0, 1 - price INR / 500)
 ```
 
-The 60-minute and ₹500 reference ranges are fixed design choices, not inferred user constraints. For “highly rated”, weights become 0.80 / 0.15 / 0.05. Explicit cheapest, fastest, or highest-rated priorities rank directly by the requested attribute and use that attribute alone for the displayed score. Direct ordering preserves price/speed differences beyond the clipped score ranges. Ties use stable option IDs. A score is a ranking utility, not a probability or confidence estimate.
+“Highly rated” changes the weights to 0.80 / 0.15 / 0.05 without inventing a minimum rating. An explicit cheapest, fastest, or highest-rated priority sorts by that attribute. Stable IDs break ties. The reference ranges and weights are system policy, not inferred user preferences; scores are not confidence probabilities.
 
-The `ranking` array exposes weighted contributions, aligned with `options`. Decision explanations include the selected record's facts, requested limits, ranking policy, and runner-up facts when available. Discovery lists results without implying permission to order.
+“Under ₹300” is strict; “₹300 or less” is inclusive. Explicit minimum ratings are inclusive. If no item meets all constraints, the system asks which requirement to change. Unsupported attributes such as organic status, allergens, or spice level block recommendations rather than being silently ignored.
 
-## Current limitations
+## Data and evaluation
 
-Extraction and intent safeguards are deliberately bounded and do not understand unrestricted English, all synonyms, spelled-out numbers, arbitrary ingredient combinations, or every negation construction. Known unsupported organic, allergen, spice, offers, live availability, exclusions, and multi-serving requests are blocked; this is not a guarantee that every unsupported phrase can be detected. Foreign currency never creates an INR budget. All catalogue data and delivery estimates are synthetic. Model probabilities are uncalibrated and validation metrics are not evidence of production reliability.
-
-## Evaluation
-
-The dataset contains 150 synthetic labelled requests across five intents, including ambiguous wording, negation, missing preferences, and difficult non-Action examples. Sixty also have gold preference annotations. The fixed split is 90 training / 30 validation / 30 test requests, with related paraphrases kept together. See [the dataset card](data/REQUESTS.md) for labelling rules, provenance, limitations, and split verification. Fit text features on training data only.
-
-Run final evaluation after training:
+There are 150 synthetic labelled requests: 30 per intent, grouped into 50 paraphrase families. Sixty requests also have gold preference annotations. The fixed split contains 90 training, 30 validation, and 30 test requests; related paraphrases stay together. Labels, tags, and rationales are never classifier features. [Dataset creation, annotation rules, and limitations](data/REQUESTS.md).
 
 ```bash
+python -m scripts.prepare_splits
+python -m scripts.train
 python -m scripts.evaluate
+python -m pytest -q
 ```
 
-The frozen test split produces 93.3% final-pipeline intent accuracy (28/30), macro F1 0.933, and zero false Actions among 24 non-Action requests. The raw classifier achieves 63.3% accuracy with one false Action; this difference shows the contribution of explicit policies and routing. On 12 preference-annotated test requests, extraction matches 11 exactly, with 97.2% accuracy on explicitly present fields. These are small, synthetic benchmark results.
+Training fits TF-IDF only on training text. Nine C/clarification-threshold combinations are compared on validation data; the selected configuration is C=4 and threshold 0.25. Evaluation loads the saved model and refuses changed dataset/split hashes.
 
-See [the evaluation report](reports/README.md), [complete test metrics](reports/test_metrics.json), [per-request predictions](reports/test_predictions.jsonl), and [confusion matrix](reports/test_confusion_matrix.png). Errors remain documented; no runtime rules, model parameters, labels, or splits were changed after observing test results.
+| Test result | Raw classifier | Full pipeline |
+| --- | ---: | ---: |
+| Accuracy | 63.3% (19/30) | 93.3% (28/30) |
+| Macro F1 | 0.569 | 0.933 |
+| False Actions among 24 non-Action requests | 1 | 0 |
 
-The [validation report](reports/validation.json) separately records all candidate scores and validation failures. The selected model uses C=4 and a 0.25 clarification threshold. Raw model validation accuracy is 80%; final pipeline validation accuracy is 29/30 (96.7%), with zero false Actions among 24 non-Action validation requests. Safeguards were refined using validation failures, so validation numbers are tuning results rather than final performance estimates.
+Preference extraction exactly matches 11/12 annotated test requests, with 97.2% accuracy on explicitly present fields. These results come from a small synthetic benchmark; zero observed false Actions does not establish a zero real-world error rate.
 
-## AI assistance and data sources
+[Per-class precision, recall, F1 and errors](reports/test_metrics.json) · [Every test prediction](reports/test_predictions.jsonl) · [Confusion matrix](reports/test_confusion_matrix.png) · [Validation selection results](reports/validation.json)
 
-OpenAI Codex assisted with the project plan, repository setup, schemas, synthetic data authorship and annotation, split preparation, extraction, ranking, intent classification and safeguards, training and validation, command-line demo, API integration, documentation, and tests. Provenance and limitations are documented in `data/README.md` and `data/REQUESTS.md`. Labels were AI-authored and AI-reviewed, not independently human-annotated. The runtime uses no external AI API or production service. Further AI usage will be documented as components are added.
+The tests cover all seven minimum assignment cases: discovery/decision, missing preferences, clarification, non-Action ordering language, a best fit that is not cheapest, multiple constraints, and unavailable catalogue information. They also check numeric boundaries, negation, empty inputs, deterministic ranking, data leakage, API errors, and all Streamlit outcomes.
 
-See [the complete libraries, models, data, and AI disclosure](docs/TOOLS.md). Exact installed versions are recorded in `requirements-evaluated.txt`; use the bounded requirements files for normal setup.
+## Limitations and improvements
 
-## Submission materials
+English, INR, single-turn requests, and a bounded food vocabulary are supported. The Information route is a small prototype/catalogue FAQ. Arbitrary ingredients, all wording variations, complex negation, live availability, and multi-turn references are not fully understood. Model probabilities are uncalibrated.
 
-- Source code and setup: this repository and README.
-- Dataset and generation method: `data/options.json`, `data/requests.jsonl`, `data/splits.json`, and their documentation.
-- Evaluation: `reports/README.md`, JSON metrics and per-request predictions, and the PNG confusion matrix.
-- Samples: `examples/sample_io.json` and seven API documentation examples.
-- Tests: run `python -m pytest -q`; the Streamlit addition includes presentation-layer tests alongside the 166 original checks.
-- Live demo: follow `docs/DEMO.md` to present the interactive local API; no prerecorded video or public deployment is included.
-- Limitations and improvements: this README, `reports/README.md`, and `docs/DESIGN.md`.
-- Libraries, models, APIs, datasets, and AI assistance: `docs/TOOLS.md` and the requirements files.
+The frozen test has two intent errors: a biryani-definition request gets Clarification, and an unresolved “other one” reference gets Information. One extraction case adds an extra unsupported exclusion label to “not spicy noodles.” These failures remain in the report. The readability cleanup preserves predictions; it adds no test-specific rules.
 
-The Streamlit interface, deployment setup, and its tests were also created with OpenAI Codex assistance. The Streamlit layer does not change the frozen runtime or test labels.
+With more time, the priority would be independently human-labelled requests, more paraphrase groups, better context and negation handling, and calibrated uncertainty, evaluated on a new untouched test set.
+
+## Libraries and AI assistance
+
+Python, scikit-learn, joblib, Pydantic, FastAPI, Uvicorn, Streamlit, pytest, HTTPX/TestClient, Matplotlib, NumPy, and SciPy are used. Direct dependency ranges are in the requirements files. `requirements-evaluated.txt` records the original numerical benchmark environment and predates Streamlit; core versions and hashes are also recorded in the reports.
+
+OpenAI Codex assisted with planning, implementation, synthetic data and label creation, tests, evaluation, and documentation. Labels were AI-authored and AI-reviewed, with no independent human annotation study. No real customer data, private company data, production credentials, external AI API, or production ONDC service is used.
+
+## Demo and deployment
+
+Use the [public Streamlit app](https://mini-flouna-kvokv5gr9m899aqnzdfhvr.streamlit.app/) and [short demo walkthrough](docs/DEMO.md). A prerecorded video is not included; the hosted app provides the live demo requested by the assignment.
+
+The Community Cloud deployment uses repository `aanyamehrotra/mini-flouna`, branch `main`, entry point `streamlit_app.py`, and root `requirements.txt`, with no secrets. The UI was tested with Streamlit 1.67.0. The Streamlit and API documentation interfaces may load display assets from public CDNs; inference and ranking use local resources.
