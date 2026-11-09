@@ -1,0 +1,8 @@
+-r requirements.txt
+
+# Behaviour tests and API test client
+pytest>=8.0,<10.0
+httpx>=0.27,<1.0
+
+# Evaluation figures
+matplotlib>=3.9,<4.0
