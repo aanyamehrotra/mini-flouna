@@ -32,4 +32,4 @@ Schemas live in `app/schemas.py`. Unstated scalar preferences default to `null`;
 
 Budget and delivery bounds explicitly store `lt` (strictly below) or `lte` (at most). For example, “under ₹300” uses `lt`, “₹300 or less” uses `lte`, and “within 30 minutes” uses `lte`. Ambiguous bounds require clarification rather than an invented value. INR is the supported currency; other currencies must not be silently converted.
 
-The response schema defines the shared JSON shape only. Intent recognition, extraction, filtering, response consistency checks, and recommendation behaviour will be implemented in later commits.
+The baseline now extracts supported preferences, filters options, and ranks matches using the policy in the root README. Its caller must supply Discovery or Decision intent; automatic intent recognition is planned for a later commit. The response schema defines the shared JSON shape; response behaviour is tested through the baseline pipeline.

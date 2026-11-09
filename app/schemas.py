@@ -61,6 +61,14 @@ class FoodOption(DataModel):
     location: Text
 
 
+class RankedOption(DataModel):
+    option_id: Text
+    score: float = Field(ge=0, le=1)
+    rating_component: float = Field(ge=0, le=1)
+    delivery_component: float = Field(ge=0, le=1)
+    price_component: float = Field(ge=0, le=1)
+
+
 class RecommendationResponse(DataModel):
     status: Literal[
         "recommended", "options_found", "information", "clarification",
@@ -69,6 +77,7 @@ class RecommendationResponse(DataModel):
     understood_request: UnderstoodRequest
     recommendation: FoodOption | None = None
     options: list[FoodOption] = Field(default_factory=list)
+    ranking: list[RankedOption] = Field(default_factory=list)
     explanation: Text
     clarification_question: Text | None = None
     warnings: list[Text] = Field(default_factory=list)
