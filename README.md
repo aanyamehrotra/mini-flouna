@@ -6,7 +6,7 @@ The goal is to understand a natural-language request, extract explicitly stated 
 
 ## Current status
 
-The project includes shared schemas, 30 fictional food options, rule-based preference extraction, constraint filtering, reproducible ranking, factual explanations, a command-line demo, and 150 labelled requests with frozen evaluation splits. Automated intent classification, the API, and evaluation results will be added in subsequent commits. The baseline requires the caller to supply Discovery or Decision intent explicitly.
+The project includes automatic intent classification, five response routes, shared schemas, 30 fictional food options, preference extraction, reproducible recommendations, a command-line demo, and 150 labelled requests with frozen splits. Training and validation are implemented. The API and final test evaluation will be added in subsequent commits.
 
 ## Planned approach
 
@@ -55,7 +55,29 @@ python -m pytest -q
 
 These checks cover schemas, catalogue integrity, extraction, ranking, and baseline request behaviour. They are not held-out ML evaluation results.
 
-## Try the baseline
+## Train and try the system
+
+Train once from the repository root:
+
+```bash
+python -m scripts.train
+```
+
+This fits TF-IDF and Logistic Regression on the 90 training requests, selects regularization and a clarification threshold using only the 30 validation requests, saves the model locally to `artifacts/intent_model.joblib`, and writes `reports/validation.json`. The binary model is ignored by Git; a fresh checkout needs this training step. Only load locally generated trusted model artifacts. Restart a running app after retraining its cached model.
+
+Automatic intent examples:
+
+```bash
+python -m app "Show vegetarian pizza"
+python -m app "Recommend vegetarian pizza under ₹300"
+python -m app "How do I place an order?"
+python -m app "Please order a pizza"
+python -m app "Help me"
+```
+
+These demonstrate Discovery, Decision, Information, unsupported Action, and Clarification respectively. No ordering, payment, cart modification, or reservation operation is implemented. Information responses use a small factual FAQ about the prototype and catalogue; general food knowledge questions receive an explicit scope limitation. Information topics are not treated as user preferences.
+
+You can still use a manual intent override for debugging:
 
 ```bash
 python -m app --intent decision "Highly rated vegetarian biryani in Indiranagar under ₹300 within 30 minutes"
@@ -65,7 +87,21 @@ python -m app --intent decision "Organic biryani"
 
 The first example recommends Garden Pot's ₹270 vegetable biryani over the cheaper option. The second lists eligible options without selecting a winner. The third reports an unsupported organic requirement and returns no recommendation. Output is structured JSON including extracted preferences, eligible options, weighted score contributions, explanations, and any clarification question or warnings.
 
-`--intent` is a manual demo input, not a prediction. The baseline accepts only Discovery and Decision; other intents will be handled when the intent component is implemented. It never executes orders.
+`--intent` is a manual debug input, not a prediction; it is not required for normal usage. Even a manual Action override requires an explicit execution request and returns `unsupported_action`.
+
+## Intent policy
+
+The statistical baseline is word TF-IDF unigrams/bigrams with Logistic Regression. Stop words are retained so negation is not deliberately removed. Only request text is a feature. Three C values (1, 4, 10) and three clarification thresholds (0.25, 0.35, 0.45) are compared. Selection minimizes false Actions in the final validation pipeline, then maximizes macro F1 and accuracy, with deterministic ties.
+
+The hybrid policy adds small, explicit checks:
+
+- Anchored execution requests, including polite “Can you order…” forms, produce Action; procedural questions, capability questions, and isolated mentions do not authorize Action.
+- Known prohibitions conservatively suppress Action. This may miss a genuine second action in a mixed request; it is not a general negation parser.
+- Clear list/show/find instructions preserve Discovery, while clear recommendation/choice instructions preserve Decision.
+- A raw model Action prediction without explicit execution evidence is replaced by a sufficiently supported non-Action class or Clarification.
+- Low model evidence, unknown vocabulary, conflicting preferences, and detected missing mandatory details lead to clarification. Information definitions comparing dietary labels are not treated as contradictory user diets.
+
+JSON `intent_details` exposes the raw model label, its probability, the clarification threshold, and the policy reason. The raw probability is uncalibrated; it is neither guaranteed confidence nor necessarily the probability of the final policy label. It is absent in manual debug mode.
 
 ## Extraction and ranking policy
 
@@ -89,7 +125,7 @@ The `ranking` array exposes weighted contributions, aligned with `options`. Deci
 
 ## Current limitations
 
-Extraction is deliberately rule-based and does not understand unrestricted English, all synonyms, spelled-out numbers, arbitrary ingredient combinations, or every negation construction. Known unsupported organic, allergen, spice, offers, live availability, exclusions, and multi-serving requests are blocked; this is not a guarantee that every unsupported phrase can be detected. All data and delivery estimates are synthetic. Supported language and policy examples are tested, but generalization needs the later labelled dataset and evaluation.
+Extraction and intent safeguards are deliberately bounded and do not understand unrestricted English, all synonyms, spelled-out numbers, arbitrary ingredient combinations, or every negation construction. Known unsupported organic, allergen, spice, offers, live availability, exclusions, and multi-serving requests are blocked; this is not a guarantee that every unsupported phrase can be detected. Foreign currency never creates an INR budget. All catalogue data and delivery estimates are synthetic. Model probabilities are uncalibrated and validation metrics are not evidence of production reliability.
 
 ## Planned evaluation
 
@@ -97,6 +133,8 @@ The dataset contains 150 synthetic labelled requests across five intents, includ
 
 Report accuracy, per-class precision/recall/F1, macro F1, a confusion matrix, false Action predictions, and extraction accuracy. Tests will also check constraint boundaries, no-match responses, unsupported information, reproducibility, and cases where the cheapest option is not the best fit.
 
+The current [validation report](reports/validation.json) separates raw model, guarded intent, and final pipeline results and records candidate scores, data hashes, library versions, and remaining errors. The selected model uses C=4 and a 0.25 clarification threshold. Raw model validation accuracy is 80%; final pipeline validation accuracy is 29/30 (96.7%), with zero false Actions among 24 non-Action validation requests. Safeguards were refined using validation failures, so these are tuning results. Final test predictions and extraction benchmark metrics are reserved for the evaluation commit. See [the validation notes](reports/README.md) for limits and reproduction.
+
 ## AI assistance and data sources
 
-OpenAI Codex assisted with the project plan, repository setup, schemas, catalogue creation and loading, extraction rules, ranking implementation, command-line demo, labelled request authorship and annotation, split preparation, documentation, and tests. All catalogue records and requests are synthetic; provenance and limitations are documented in `data/README.md` and `data/REQUESTS.md`. Labels were AI-authored and AI-reviewed, not independently human-annotated. No trained model, external API integration, or ML evaluation results are included yet. Further AI usage will be documented as components are added.
+OpenAI Codex assisted with the project plan, repository setup, schemas, synthetic data authorship and annotation, split preparation, extraction, ranking, intent classification and safeguards, training and validation, command-line demo, documentation, and tests. Provenance and limitations are documented in `data/README.md` and `data/REQUESTS.md`. Labels were AI-authored and AI-reviewed, not independently human-annotated. The runtime uses no external AI API or production service. Further AI usage will be documented as components are added.

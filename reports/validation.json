@@ -1,0 +1,376 @@
+{
+  "seed": 42,
+  "training_count": 90,
+  "validation_count": 30,
+  "test_evaluated": false,
+  "dataset_sha256": "2ef6c2836033ae39cbb642c721d1b94cba8c41abdec44b602f46c017fcb9e7ce",
+  "splits_sha256": "dc64798085954e8dc2860f83e2cecf710f14fe2f12fc0c3913eed933840cef0f",
+  "versions": {
+    "scikit-learn": "1.9.1",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "joblib": "1.6.0"
+  },
+  "selected_C": 4.0,
+  "clarification_threshold": 0.25,
+  "selection_policy": "Minimize final-pipeline validation false Actions, then maximize macro F1 and accuracy; prefer smaller C and threshold on ties.",
+  "features": "Word TF-IDF unigrams and bigrams, sublinear term frequency; training text only; no stop-word removal.",
+  "candidates": [
+    {
+      "C": 1.0,
+      "clarification_threshold": 0.25,
+      "accuracy": 0.9,
+      "macro_f1": 0.8933333333333333,
+      "false_action_count": 0
+    },
+    {
+      "C": 1.0,
+      "clarification_threshold": 0.35,
+      "accuracy": 0.8333333333333334,
+      "macro_f1": 0.7983193277310925,
+      "false_action_count": 0
+    },
+    {
+      "C": 1.0,
+      "clarification_threshold": 0.45,
+      "accuracy": 0.7666666666666667,
+      "macro_f1": 0.7081339712918661,
+      "false_action_count": 0
+    },
+    {
+      "C": 4.0,
+      "clarification_threshold": 0.25,
+      "accuracy": 0.9666666666666667,
+      "macro_f1": 0.9664335664335665,
+      "false_action_count": 0
+    },
+    {
+      "C": 4.0,
+      "clarification_threshold": 0.35,
+      "accuracy": 0.9,
+      "macro_f1": 0.8933333333333333,
+      "false_action_count": 0
+    },
+    {
+      "C": 4.0,
+      "clarification_threshold": 0.45,
+      "accuracy": 0.8666666666666667,
+      "macro_f1": 0.85,
+      "false_action_count": 0
+    },
+    {
+      "C": 10.0,
+      "clarification_threshold": 0.25,
+      "accuracy": 0.9666666666666667,
+      "macro_f1": 0.9664335664335665,
+      "false_action_count": 0
+    },
+    {
+      "C": 10.0,
+      "clarification_threshold": 0.35,
+      "accuracy": 0.9,
+      "macro_f1": 0.8933333333333333,
+      "false_action_count": 0
+    },
+    {
+      "C": 10.0,
+      "clarification_threshold": 0.45,
+      "accuracy": 0.8666666666666667,
+      "macro_f1": 0.85,
+      "false_action_count": 0
+    }
+  ],
+  "raw_model_validation": {
+    "accuracy": 0.8,
+    "macro_f1": 0.8023310023310023,
+    "false_action_count": 0,
+    "false_action_rate": 0.0,
+    "classification_report": {
+      "information": {
+        "precision": 0.7142857142857143,
+        "recall": 0.8333333333333334,
+        "f1-score": 0.7692307692307693,
+        "support": 6.0
+      },
+      "discovery": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1-score": 0.6666666666666666,
+        "support": 6.0
+      },
+      "decision": {
+        "precision": 0.5555555555555556,
+        "recall": 0.8333333333333334,
+        "f1-score": 0.6666666666666666,
+        "support": 6.0
+      },
+      "action": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 6.0
+      },
+      "clarification": {
+        "precision": 1.0,
+        "recall": 0.8333333333333334,
+        "f1-score": 0.9090909090909091,
+        "support": 6.0
+      },
+      "accuracy": 0.8,
+      "macro avg": {
+        "precision": 0.8539682539682539,
+        "recall": 0.8,
+        "f1-score": 0.8023310023310023,
+        "support": 30.0
+      },
+      "weighted avg": {
+        "precision": 0.853968253968254,
+        "recall": 0.8,
+        "f1-score": 0.8023310023310023,
+        "support": 30.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        5,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        3,
+        3,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        5,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        6,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        5
+      ]
+    ],
+    "class_order": [
+      "information",
+      "discovery",
+      "decision",
+      "action",
+      "clarification"
+    ]
+  },
+  "guarded_intent_validation": {
+    "accuracy": 0.8666666666666667,
+    "macro_f1": 0.856043956043956,
+    "false_action_count": 0,
+    "false_action_rate": 0.0,
+    "classification_report": {
+      "information": {
+        "precision": 0.8333333333333334,
+        "recall": 0.8333333333333334,
+        "f1-score": 0.8333333333333334,
+        "support": 6.0
+      },
+      "discovery": {
+        "precision": 0.8571428571428571,
+        "recall": 1.0,
+        "f1-score": 0.9230769230769231,
+        "support": 6.0
+      },
+      "decision": {
+        "precision": 0.75,
+        "recall": 1.0,
+        "f1-score": 0.8571428571428571,
+        "support": 6.0
+      },
+      "action": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 6.0
+      },
+      "clarification": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1-score": 0.6666666666666666,
+        "support": 6.0
+      },
+      "accuracy": 0.8666666666666667,
+      "macro avg": {
+        "precision": 0.8880952380952382,
+        "recall": 0.8666666666666668,
+        "f1-score": 0.856043956043956,
+        "support": 30.0
+      },
+      "weighted avg": {
+        "precision": 0.888095238095238,
+        "recall": 0.8666666666666667,
+        "f1-score": 0.856043956043956,
+        "support": 30.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        5,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        6,
+        0
+      ],
+      [
+        1,
+        1,
+        1,
+        0,
+        3
+      ]
+    ],
+    "class_order": [
+      "information",
+      "discovery",
+      "decision",
+      "action",
+      "clarification"
+    ]
+  },
+  "pipeline_validation": {
+    "accuracy": 0.9666666666666667,
+    "macro_f1": 0.9664335664335665,
+    "false_action_count": 0,
+    "false_action_rate": 0.0,
+    "classification_report": {
+      "information": {
+        "precision": 1.0,
+        "recall": 0.8333333333333334,
+        "f1-score": 0.9090909090909091,
+        "support": 6.0
+      },
+      "discovery": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 6.0
+      },
+      "decision": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 6.0
+      },
+      "action": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 6.0
+      },
+      "clarification": {
+        "precision": 0.8571428571428571,
+        "recall": 1.0,
+        "f1-score": 0.9230769230769231,
+        "support": 6.0
+      },
+      "accuracy": 0.9666666666666667,
+      "macro avg": {
+        "precision": 0.9714285714285713,
+        "recall": 0.9666666666666668,
+        "f1-score": 0.9664335664335665,
+        "support": 30.0
+      },
+      "weighted avg": {
+        "precision": 0.9714285714285714,
+        "recall": 0.9666666666666667,
+        "f1-score": 0.9664335664335665,
+        "support": 30.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        5,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        6,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        6
+      ]
+    ],
+    "class_order": [
+      "information",
+      "discovery",
+      "decision",
+      "action",
+      "clarification"
+    ]
+  },
+  "validation_errors": [
+    {
+      "id": "information_10_3",
+      "text": "Which ordering actions can the prototype perform?",
+      "expected": "information",
+      "predicted": "clarification"
+    }
+  ]
+}

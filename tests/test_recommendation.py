@@ -151,6 +151,7 @@ def test_all_constraints_are_checked_on_direct_structured_requests():
     assert {o.id for o in result.options} == {"food_002", "food_006"}
 
 
-def test_baseline_does_not_pretend_to_handle_other_intents():
-    with pytest.raises(ValueError, match="baseline"):
-        process_request("Order biryani", intent="action")
+def test_explicit_action_is_identified_but_not_executed():
+    response = process_request("Order biryani", intent="action")
+    assert response.status == "unsupported_action"
+    assert response.recommendation is None

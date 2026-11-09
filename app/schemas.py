@@ -49,6 +49,17 @@ class UnderstoodRequest(DataModel):
     preferences: Preferences
 
 
+class IntentDetails(DataModel):
+    raw_intent: Intent
+    raw_probability: float = Field(ge=0, le=1)
+    clarification_threshold: float = Field(ge=0, le=1)
+    reason: Literal[
+        "model_prediction", "explicit_action_request", "action_not_authorized",
+        "low_model_evidence", "unresolved_preferences",
+        "explicit_non_action_request",
+    ]
+
+
 class FoodOption(DataModel):
     id: Text
     restaurant_name: Text
@@ -75,6 +86,7 @@ class RecommendationResponse(DataModel):
         "no_match", "unsupported_action", "unsupported_constraint",
     ]
     understood_request: UnderstoodRequest
+    intent_details: IntentDetails | None = None
     recommendation: FoodOption | None = None
     options: list[FoodOption] = Field(default_factory=list)
     ranking: list[RankedOption] = Field(default_factory=list)

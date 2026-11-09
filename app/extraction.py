@@ -85,6 +85,8 @@ def extract_preferences(text: str) -> ExtractionResult:
         preferences.dietary_preference = diets[0]
     elif len(diets) > 1:
         questions.append("Which single dietary requirement should I use?")
+    if not diets and re.search(r"\b(?:dietary restrictions?|food restrictions?|special diet)\b", text):
+        questions.append("What exact dietary restrictions should I apply?")
 
     budgets = []
     for match in re.finditer(
@@ -106,6 +108,9 @@ def extract_preferences(text: str) -> ExtractionResult:
         questions.append("What single positive maximum budget should I use?")
     elif re.search(r"₹|\brs\.?\s*\d|\binr\b|\bbudget\b|\brupees\b", text):
         questions.append("What is your maximum budget in INR, and is the limit inclusive?")
+    if re.search(r"\b(?:forgot to say the unit|might be time or money|not said what the limit measures)\b", text):
+        preferences.budget = None
+        questions.append("Does the numeric limit refer to price or delivery time, and what unit should I use?")
 
     times = []
     for match in re.finditer(
@@ -164,6 +169,8 @@ def extract_preferences(text: str) -> ExtractionResult:
         match = re.search(pattern, text)
         if match:
             preferences.unsupported_constraints.append(f"{label}: {match.group(0)}")
+            if label == "non-INR currency":
+                preferences.budget = None
 
     if dishes or cuisines or diets or re.search(r"\b(?:food|meal|restaurant|eat|dinner|lunch|breakfast)\b", text):
         preferences.domain = "food"
