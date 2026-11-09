@@ -6,7 +6,7 @@ The goal is to understand a natural-language request, extract explicitly stated 
 
 ## Current status
 
-This first commit contains the project structure and dependency setup. Request processing, the API, datasets, tests, and evaluation results will be added in subsequent commits. There is no running recommendation service yet.
+The project now includes shared request/response schemas, a validated catalogue of 30 fictional food options, and tests for data integrity and input boundaries. Request processing, the API, labelled requests, and evaluation results will be added in subsequent commits. There is no running recommendation service yet.
 
 ## Planned approach
 
@@ -45,7 +45,15 @@ requirements.txt      Runtime dependencies
 requirements-dev.txt  Development and evaluation dependencies
 ```
 
-Empty directories currently contain placeholders. Modules will be added when their functionality is implemented.
+See [data/README.md](data/README.md) for catalogue provenance, field definitions, dietary conventions, supported locations, and constraint semantics. Modules will be added when their functionality is implemented.
+
+## Run the current checks
+
+```bash
+python -m pytest -q
+```
+
+These checks validate the schemas and mock catalogue. They do not measure intent classification or recommendation quality yet.
 
 ## Planned evaluation
 
@@ -55,4 +63,4 @@ Report accuracy, per-class precision/recall/F1, macro F1, a confusion matrix, fa
 
 ## AI assistance and data sources
 
-OpenAI Codex assisted with the project plan and this initial repository setup. No trained model, request dataset, external API integration, or evaluation results are included yet. Dataset provenance, any generation or augmentation assistance, and further AI usage will be documented as those components are added.
+OpenAI Codex assisted with the project plan, repository setup, schemas, catalogue loader, tests, and synthetic catalogue creation. All catalogue records are fictional; their definitions and limitations are documented in `data/README.md`. No trained model, labelled request dataset, external API integration, or evaluation results are included yet. Further data generation, augmentation, and AI usage will be documented as those components are added.
