@@ -6,7 +6,7 @@ The goal is to understand a natural-language request, extract explicitly stated 
 
 ## Current status
 
-The project includes automatic intent classification, five response routes, shared schemas, 30 fictional food options, preference extraction, reproducible recommendations, a command-line demo, and 150 labelled requests with frozen splits. Training and validation are implemented. The API and final test evaluation will be added in subsequent commits.
+The project includes a FastAPI interface with interactive documentation, automatic intent classification, five intent routes, shared schemas, 30 fictional food options, reproducible recommendations, a command-line demo, and 150 labelled requests with frozen splits. Training and validation are implemented. Final test evaluation will be added in a subsequent commit.
 
 ## Planned approach
 
@@ -53,7 +53,7 @@ See [data/README.md](data/README.md) for catalogue provenance, field definitions
 python -m pytest -q
 ```
 
-These checks cover schemas, catalogue integrity, extraction, ranking, and baseline request behaviour. They are not held-out ML evaluation results.
+These checks cover schemas, catalogue integrity, extraction, ranking, intent safeguards, and the HTTP interface. They are not held-out ML evaluation results. API tests train a temporary model from the training split, so they do not need an existing local model artifact.
 
 ## Train and try the system
 
@@ -88,6 +88,51 @@ python -m app --intent decision "Organic biryani"
 The first example recommends Garden Pot's ₹270 vegetable biryani over the cheaper option. The second lists eligible options without selecting a winner. The third reports an unsupported organic requirement and returns no recommendation. Output is structured JSON including extracted preferences, eligible options, weighted score contributions, explanations, and any clarification question or warnings.
 
 `--intent` is a manual debug input, not a prediction; it is not required for normal usage. Even a manual Action override requires an explicit execution request and returns `unsupported_action`.
+
+## Run the API
+
+After installing dependencies and training the model:
+
+```bash
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
+
+Open [interactive API documentation](http://127.0.0.1:8000/docs). Expand `POST /recommend`, select one of the seven examples, click **Try it out**, then **Execute**. Alternative reference documentation is available at [ReDoc](http://127.0.0.1:8000/redoc). The root URL redirects to the interactive documentation. The documentation UI loads its display assets from a public CDN; request processing uses only local data and the local model.
+
+Send a request from a terminal:
+
+```bash
+curl -X POST http://127.0.0.1:8000/recommend \
+  -H 'Content-Type: application/json' \
+  -d '{"text":"Recommend highly rated vegetarian biryani in Indiranagar under ₹300 within 30 minutes"}'
+```
+
+Selected response fields for that example:
+
+```json
+{
+  "status": "recommended",
+  "recommendation": {
+    "id": "food_002",
+    "restaurant_name": "Garden Pot",
+    "dish_name": "Vegetable Biryani",
+    "price_inr": 270.0,
+    "rating": 4.7,
+    "delivery_minutes": 24
+  }
+}
+```
+
+The full response also includes extracted preferences, intent details, eligible options, score contributions, explanation, and warnings. HTTP requests accept only `text`; the command-line debugging override is not exposed through the API.
+
+| Endpoint or HTTP status | Meaning |
+| --- | --- |
+| `GET /health` | Liveness check returning `{"status":"ok"}`; it does not verify model readiness |
+| `POST /recommend` → `200` | Request processed; inspect the JSON `status` for the outcome |
+| `422` | Invalid JSON or request fields: missing/blank/non-string text, more than 2,000 characters, or unknown fields |
+| `503` | Model has not been trained; run `python -m scripts.train` |
+
+Valid domain outcomes are `recommended`, `options_found`, `information`, `clarification`, `no_match`, `unsupported_action`, and `unsupported_constraint`. Clarification, no-match, and unsupported outcomes are ordinary processed requests, not HTTP failures. The API adds no ordering or payment endpoint and never executes an Action request.
 
 ## Intent policy
 
@@ -137,4 +182,4 @@ The current [validation report](reports/validation.json) separates raw model, gu
 
 ## AI assistance and data sources
 
-OpenAI Codex assisted with the project plan, repository setup, schemas, synthetic data authorship and annotation, split preparation, extraction, ranking, intent classification and safeguards, training and validation, command-line demo, documentation, and tests. Provenance and limitations are documented in `data/README.md` and `data/REQUESTS.md`. Labels were AI-authored and AI-reviewed, not independently human-annotated. The runtime uses no external AI API or production service. Further AI usage will be documented as components are added.
+OpenAI Codex assisted with the project plan, repository setup, schemas, synthetic data authorship and annotation, split preparation, extraction, ranking, intent classification and safeguards, training and validation, command-line demo, API integration, documentation, and tests. Provenance and limitations are documented in `data/README.md` and `data/REQUESTS.md`. Labels were AI-authored and AI-reviewed, not independently human-annotated. The runtime uses no external AI API or production service. Further AI usage will be documented as components are added.
