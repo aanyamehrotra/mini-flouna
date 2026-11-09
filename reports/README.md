@@ -1,4 +1,46 @@
-# Validation results
+# Evaluation results
+
+The frozen 30-request test split was evaluated after model selection and validation-driven policy changes were complete. Runtime rules, model parameters, gold labels, and split assignments were not changed in response to test errors.
+
+## Final test results
+
+| Component | Test accuracy | Macro F1 | False Actions among 24 non-Action requests |
+| --- | ---: | ---: | ---: |
+| Raw statistical model | 63.3% (19/30) | 0.569 | 1/24 |
+| Model with explicit intent checks | 83.3% (25/30) | 0.816 | 0/24 |
+| Full routing pipeline | 93.3% (28/30) | 0.933 | 0/24 |
+
+![Raw model and final pipeline test confusion matrices](test_confusion_matrix.png)
+
+`test_metrics.json` includes per-class precision, recall, F1, confusion matrices, false Action counts/rates, extraction metrics, and errors. `test_predictions.jsonl` records every test input and its raw, guarded, and final prediction. The report also records model/data/split hashes, a runtime source hash, the runtime source commit, and dependency versions. These traces make the evaluation auditable; model binaries remain local.
+
+The final pipeline misclassifies two requests:
+
+- “I would like a definition of biryani.” is Information but gets Clarification.
+- “The other one would be fine.” requires Clarification but gets Information.
+
+Both remain documented failures. The second is a limitation in missing-context detection; it does not produce a food recommendation or execute an action.
+
+## Preference extraction results
+
+Only 12 of the test requests have gold preference annotations. Standalone extraction and pipeline extraction both achieve 11/12 exact request matches (91.7%). Across 11 fields per request, 131/132 field values match (99.2%); explicitly present values match 35/36 (97.2%), and missing values match 96/96. An always-empty preference object would match 72.7% of these field values, which is why overall field accuracy alone would be misleading.
+
+The error is “Find not spicy noodles.” The extractor correctly retains an unsupported spice requirement but also emits an extra exclusion category. The system still blocks a recommendation because spice information is unavailable; the extra category is counted as an extraction error.
+
+Unsupported constraints are compared as category sets, ignoring explanatory text after a colon. Other text is compared ignoring case and surrounding/repeated whitespace; numeric bounds and operators must match exactly. Per-field present/missing denominators, exact-request accuracy, and all mismatches are included in the JSON report. These are small-sample synthetic results, not production estimates.
+
+## Reproduce final evaluation
+
+```bash
+python -m scripts.prepare_splits
+python -m scripts.train
+python -m scripts.evaluate
+python -m pytest -q
+```
+
+Evaluation never fits the model or selects thresholds. It refuses dataset/split hash mismatches against the model's training metadata. An optional `--split validation` supports diagnostic reporting without changing the saved model. Use `--output-dir` for alternate report destinations.
+
+## Validation results
 
 `validation.json` records model selection on the frozen 90-request training and 30-request validation splits. It includes data hashes, dependency versions, all nine candidate configurations, raw-model metrics, guarded-intent metrics, final-pipeline metrics, per-class precision/recall/F1, confusion matrices (rows are actual, columns predicted, using `class_order`), and final-pipeline validation errors.
 
@@ -31,4 +73,4 @@ These are documented policy choices refined using validation examples. Candidate
 
 The dataset is small, synthetic, balanced, and AI-authored. Six validation examples per class come from only two paraphrase groups. Checks are conservative and bounded: complex mixed intents, negation, indirect action requests, and new wording can still fail. The Information route is a catalogue/prototype FAQ, not a general knowledge model. Numeric probabilities are not calibrated.
 
-`test_evaluated` is false. No predictions or extraction metrics have been computed for the 30-request final test split in this commit. The later evaluation should report the raw model and full pipeline separately, include extraction performance, a rendered confusion matrix, and failure analysis, without tuning on test results.
+The historical `validation.json` retains `test_evaluated: false` because its training run did not compute test predictions. Final test evaluation is recorded separately in `test_metrics.json` with `test_evaluated: true`. Validation and test scores must not be combined or presented as the same result.

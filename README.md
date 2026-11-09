@@ -6,7 +6,7 @@ The goal is to understand a natural-language request, extract explicitly stated 
 
 ## Current status
 
-The project includes a FastAPI interface with interactive documentation, automatic intent classification, five intent routes, shared schemas, 30 fictional food options, reproducible recommendations, a command-line demo, and 150 labelled requests with frozen splits. Training and validation are implemented. Final test evaluation will be added in a subsequent commit.
+The project includes a FastAPI interface with interactive documentation, automatic intent classification, five intent routes, shared schemas, 30 fictional food options, reproducible recommendations, a command-line demo, and 150 labelled requests with frozen splits. Training, validation, and final test evaluation are implemented.
 
 ## Planned approach
 
@@ -172,13 +172,21 @@ The `ranking` array exposes weighted contributions, aligned with `options`. Deci
 
 Extraction and intent safeguards are deliberately bounded and do not understand unrestricted English, all synonyms, spelled-out numbers, arbitrary ingredient combinations, or every negation construction. Known unsupported organic, allergen, spice, offers, live availability, exclusions, and multi-serving requests are blocked; this is not a guarantee that every unsupported phrase can be detected. Foreign currency never creates an INR budget. All catalogue data and delivery estimates are synthetic. Model probabilities are uncalibrated and validation metrics are not evidence of production reliability.
 
-## Planned evaluation
+## Evaluation
 
 The dataset contains 150 synthetic labelled requests across five intents, including ambiguous wording, negation, missing preferences, and difficult non-Action examples. Sixty also have gold preference annotations. The fixed split is 90 training / 30 validation / 30 test requests, with related paraphrases kept together. See [the dataset card](data/REQUESTS.md) for labelling rules, provenance, limitations, and split verification. Fit text features on training data only.
 
-Report accuracy, per-class precision/recall/F1, macro F1, a confusion matrix, false Action predictions, and extraction accuracy. Tests will also check constraint boundaries, no-match responses, unsupported information, reproducibility, and cases where the cheapest option is not the best fit.
+Run final evaluation after training:
 
-The current [validation report](reports/validation.json) separates raw model, guarded intent, and final pipeline results and records candidate scores, data hashes, library versions, and remaining errors. The selected model uses C=4 and a 0.25 clarification threshold. Raw model validation accuracy is 80%; final pipeline validation accuracy is 29/30 (96.7%), with zero false Actions among 24 non-Action validation requests. Safeguards were refined using validation failures, so these are tuning results. Final test predictions and extraction benchmark metrics are reserved for the evaluation commit. See [the validation notes](reports/README.md) for limits and reproduction.
+```bash
+python -m scripts.evaluate
+```
+
+The frozen test split produces 93.3% final-pipeline intent accuracy (28/30), macro F1 0.933, and zero false Actions among 24 non-Action requests. The raw classifier achieves 63.3% accuracy with one false Action; this difference shows the contribution of explicit policies and routing. On 12 preference-annotated test requests, extraction matches 11 exactly, with 97.2% accuracy on explicitly present fields. These are small, synthetic benchmark results.
+
+See [the evaluation report](reports/README.md), [complete test metrics](reports/test_metrics.json), [per-request predictions](reports/test_predictions.jsonl), and [confusion matrix](reports/test_confusion_matrix.png). Errors remain documented; no runtime rules, model parameters, labels, or splits were changed after observing test results.
+
+The [validation report](reports/validation.json) separately records all candidate scores and validation failures. The selected model uses C=4 and a 0.25 clarification threshold. Raw model validation accuracy is 80%; final pipeline validation accuracy is 29/30 (96.7%), with zero false Actions among 24 non-Action validation requests. Safeguards were refined using validation failures, so validation numbers are tuning results rather than final performance estimates.
 
 ## AI assistance and data sources
 

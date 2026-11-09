@@ -1,0 +1,697 @@
+{
+  "split": "test",
+  "request_count": 30,
+  "test_evaluated": true,
+  "model_sha256": "2259db2856784e1cb08bd38528ac76a5b778d0a16d117ed1f6584e1d74b18ba5",
+  "dataset_sha256": "2ef6c2836033ae39cbb642c721d1b94cba8c41abdec44b602f46c017fcb9e7ce",
+  "splits_sha256": "dc64798085954e8dc2860f83e2cecf710f14fe2f12fc0c3913eed933840cef0f",
+  "model_selection": {
+    "seed": 42,
+    "training_count": 90,
+    "validation_count": 30,
+    "selected_C": 4.0,
+    "clarification_threshold": 0.25,
+    "versions": {
+      "scikit-learn": "1.9.1",
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "joblib": "1.6.0"
+    }
+  },
+  "python_version": "3.14.2",
+  "runtime_sha256": "b0cb711335f713c5b3a24dabadb644922a680a4e788430582b29d4cba8b507ec",
+  "source_commit": "fe64ff48aeabfd3688e6678e1bad2c1b5b1fc974",
+  "raw_model": {
+    "accuracy": 0.6333333333333333,
+    "macro_f1": 0.5694304388422037,
+    "false_action_count": 1,
+    "false_action_rate": 0.041666666666666664,
+    "classification_report": {
+      "information": {
+        "precision": 0.6666666666666666,
+        "recall": 1.0,
+        "f1-score": 0.8,
+        "support": 6.0
+      },
+      "discovery": {
+        "precision": 1.0,
+        "recall": 0.16666666666666666,
+        "f1-score": 0.2857142857142857,
+        "support": 6.0
+      },
+      "decision": {
+        "precision": 0.5454545454545454,
+        "recall": 1.0,
+        "f1-score": 0.7058823529411765,
+        "support": 6.0
+      },
+      "action": {
+        "precision": 0.8333333333333334,
+        "recall": 0.8333333333333334,
+        "f1-score": 0.8333333333333334,
+        "support": 6.0
+      },
+      "clarification": {
+        "precision": 0.3333333333333333,
+        "recall": 0.16666666666666666,
+        "f1-score": 0.2222222222222222,
+        "support": 6.0
+      },
+      "accuracy": 0.6333333333333333,
+      "macro avg": {
+        "precision": 0.6757575757575758,
+        "recall": 0.6333333333333334,
+        "f1-score": 0.5694304388422037,
+        "support": 30.0
+      },
+      "weighted avg": {
+        "precision": 0.6757575757575758,
+        "recall": 0.6333333333333333,
+        "f1-score": 0.5694304388422036,
+        "support": 30.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        6,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        1,
+        2,
+        0,
+        2
+      ],
+      [
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        5,
+        0
+      ],
+      [
+        1,
+        0,
+        3,
+        1,
+        1
+      ]
+    ],
+    "class_order": [
+      "information",
+      "discovery",
+      "decision",
+      "action",
+      "clarification"
+    ]
+  },
+  "guarded_intent": {
+    "accuracy": 0.8333333333333334,
+    "macro_f1": 0.8155555555555557,
+    "false_action_count": 0,
+    "false_action_rate": 0.0,
+    "classification_report": {
+      "information": {
+        "precision": 0.8333333333333334,
+        "recall": 0.8333333333333334,
+        "f1-score": 0.8333333333333334,
+        "support": 6.0
+      },
+      "discovery": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 6.0
+      },
+      "decision": {
+        "precision": 0.6666666666666666,
+        "recall": 1.0,
+        "f1-score": 0.8,
+        "support": 6.0
+      },
+      "action": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 6.0
+      },
+      "clarification": {
+        "precision": 0.6666666666666666,
+        "recall": 0.3333333333333333,
+        "f1-score": 0.4444444444444444,
+        "support": 6.0
+      },
+      "accuracy": 0.8333333333333334,
+      "macro avg": {
+        "precision": 0.8333333333333334,
+        "recall": 0.8333333333333334,
+        "f1-score": 0.8155555555555557,
+        "support": 30.0
+      },
+      "weighted avg": {
+        "precision": 0.8333333333333334,
+        "recall": 0.8333333333333334,
+        "f1-score": 0.8155555555555556,
+        "support": 30.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        5,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        6,
+        0
+      ],
+      [
+        1,
+        0,
+        3,
+        0,
+        2
+      ]
+    ],
+    "class_order": [
+      "information",
+      "discovery",
+      "decision",
+      "action",
+      "clarification"
+    ]
+  },
+  "full_pipeline": {
+    "accuracy": 0.9333333333333333,
+    "macro_f1": 0.9333333333333333,
+    "false_action_count": 0,
+    "false_action_rate": 0.0,
+    "classification_report": {
+      "information": {
+        "precision": 0.8333333333333334,
+        "recall": 0.8333333333333334,
+        "f1-score": 0.8333333333333334,
+        "support": 6.0
+      },
+      "discovery": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 6.0
+      },
+      "decision": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 6.0
+      },
+      "action": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 6.0
+      },
+      "clarification": {
+        "precision": 0.8333333333333334,
+        "recall": 0.8333333333333334,
+        "f1-score": 0.8333333333333334,
+        "support": 6.0
+      },
+      "accuracy": 0.9333333333333333,
+      "macro avg": {
+        "precision": 0.9333333333333333,
+        "recall": 0.9333333333333333,
+        "f1-score": 0.9333333333333333,
+        "support": 30.0
+      },
+      "weighted avg": {
+        "precision": 0.9333333333333333,
+        "recall": 0.9333333333333333,
+        "f1-score": 0.9333333333333333,
+        "support": 30.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        5,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        6,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        6,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        6,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        5
+      ]
+    ],
+    "class_order": [
+      "information",
+      "discovery",
+      "decision",
+      "action",
+      "clarification"
+    ]
+  },
+  "status_counts": {
+    "clarification": 6,
+    "information": 6,
+    "options_found": 3,
+    "recommended": 3,
+    "unsupported_action": 6,
+    "unsupported_constraint": 6
+  },
+  "standalone_extraction": {
+    "annotated_requests": 12,
+    "exact_requests": 11,
+    "exact_request_accuracy": 0.9166666666666666,
+    "overall": {
+      "correct": 131,
+      "total": 132,
+      "present_correct": 35,
+      "present_total": 36,
+      "missing_correct": 96,
+      "missing_total": 96,
+      "accuracy": 0.9924242424242424,
+      "present_accuracy": 0.9722222222222222,
+      "missing_accuracy": 1.0
+    },
+    "per_field": {
+      "domain": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 12,
+        "present_total": 12,
+        "missing_correct": 0,
+        "missing_total": 0,
+        "accuracy": 1.0,
+        "present_accuracy": 1.0,
+        "missing_accuracy": null
+      },
+      "dish": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 12,
+        "present_total": 12,
+        "missing_correct": 0,
+        "missing_total": 0,
+        "accuracy": 1.0,
+        "present_accuracy": 1.0,
+        "missing_accuracy": null
+      },
+      "cuisine": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 0,
+        "present_total": 0,
+        "missing_correct": 12,
+        "missing_total": 12,
+        "accuracy": 1.0,
+        "present_accuracy": null,
+        "missing_accuracy": 1.0
+      },
+      "dietary_preference": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 0,
+        "present_total": 0,
+        "missing_correct": 12,
+        "missing_total": 12,
+        "accuracy": 1.0,
+        "present_accuracy": null,
+        "missing_accuracy": 1.0
+      },
+      "location": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 0,
+        "present_total": 0,
+        "missing_correct": 12,
+        "missing_total": 12,
+        "accuracy": 1.0,
+        "present_accuracy": null,
+        "missing_accuracy": 1.0
+      },
+      "budget": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 0,
+        "present_total": 0,
+        "missing_correct": 12,
+        "missing_total": 12,
+        "accuracy": 1.0,
+        "present_accuracy": null,
+        "missing_accuracy": 1.0
+      },
+      "delivery_limit": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 0,
+        "present_total": 0,
+        "missing_correct": 12,
+        "missing_total": 12,
+        "accuracy": 1.0,
+        "present_accuracy": null,
+        "missing_accuracy": 1.0
+      },
+      "min_rating": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 3,
+        "present_total": 3,
+        "missing_correct": 9,
+        "missing_total": 9,
+        "accuracy": 1.0,
+        "present_accuracy": 1.0,
+        "missing_accuracy": 1.0
+      },
+      "prefer_high_rating": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 0,
+        "present_total": 0,
+        "missing_correct": 12,
+        "missing_total": 12,
+        "accuracy": 1.0,
+        "present_accuracy": null,
+        "missing_accuracy": 1.0
+      },
+      "priority": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 3,
+        "present_total": 3,
+        "missing_correct": 9,
+        "missing_total": 9,
+        "accuracy": 1.0,
+        "present_accuracy": 1.0,
+        "missing_accuracy": 1.0
+      },
+      "unsupported_constraints": {
+        "correct": 11,
+        "total": 12,
+        "present_correct": 5,
+        "present_total": 6,
+        "missing_correct": 6,
+        "missing_total": 6,
+        "accuracy": 0.9166666666666666,
+        "present_accuracy": 0.8333333333333334,
+        "missing_accuracy": 1.0
+      }
+    },
+    "empty_preferences_baseline_accuracy": 0.7272727272727273,
+    "errors": [
+      {
+        "id": "discovery_07_2",
+        "text": "Find not spicy noodles.",
+        "differences": {
+          "unsupported_constraints": {
+            "expected": [
+              "spice level"
+            ],
+            "predicted": [
+              "spice level: spicy",
+              "excluded food or dietary preference: not spicy noodles"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "pipeline_extraction": {
+    "annotated_requests": 12,
+    "exact_requests": 11,
+    "exact_request_accuracy": 0.9166666666666666,
+    "overall": {
+      "correct": 131,
+      "total": 132,
+      "present_correct": 35,
+      "present_total": 36,
+      "missing_correct": 96,
+      "missing_total": 96,
+      "accuracy": 0.9924242424242424,
+      "present_accuracy": 0.9722222222222222,
+      "missing_accuracy": 1.0
+    },
+    "per_field": {
+      "domain": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 12,
+        "present_total": 12,
+        "missing_correct": 0,
+        "missing_total": 0,
+        "accuracy": 1.0,
+        "present_accuracy": 1.0,
+        "missing_accuracy": null
+      },
+      "dish": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 12,
+        "present_total": 12,
+        "missing_correct": 0,
+        "missing_total": 0,
+        "accuracy": 1.0,
+        "present_accuracy": 1.0,
+        "missing_accuracy": null
+      },
+      "cuisine": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 0,
+        "present_total": 0,
+        "missing_correct": 12,
+        "missing_total": 12,
+        "accuracy": 1.0,
+        "present_accuracy": null,
+        "missing_accuracy": 1.0
+      },
+      "dietary_preference": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 0,
+        "present_total": 0,
+        "missing_correct": 12,
+        "missing_total": 12,
+        "accuracy": 1.0,
+        "present_accuracy": null,
+        "missing_accuracy": 1.0
+      },
+      "location": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 0,
+        "present_total": 0,
+        "missing_correct": 12,
+        "missing_total": 12,
+        "accuracy": 1.0,
+        "present_accuracy": null,
+        "missing_accuracy": 1.0
+      },
+      "budget": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 0,
+        "present_total": 0,
+        "missing_correct": 12,
+        "missing_total": 12,
+        "accuracy": 1.0,
+        "present_accuracy": null,
+        "missing_accuracy": 1.0
+      },
+      "delivery_limit": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 0,
+        "present_total": 0,
+        "missing_correct": 12,
+        "missing_total": 12,
+        "accuracy": 1.0,
+        "present_accuracy": null,
+        "missing_accuracy": 1.0
+      },
+      "min_rating": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 3,
+        "present_total": 3,
+        "missing_correct": 9,
+        "missing_total": 9,
+        "accuracy": 1.0,
+        "present_accuracy": 1.0,
+        "missing_accuracy": 1.0
+      },
+      "prefer_high_rating": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 0,
+        "present_total": 0,
+        "missing_correct": 12,
+        "missing_total": 12,
+        "accuracy": 1.0,
+        "present_accuracy": null,
+        "missing_accuracy": 1.0
+      },
+      "priority": {
+        "correct": 12,
+        "total": 12,
+        "present_correct": 3,
+        "present_total": 3,
+        "missing_correct": 9,
+        "missing_total": 9,
+        "accuracy": 1.0,
+        "present_accuracy": 1.0,
+        "missing_accuracy": 1.0
+      },
+      "unsupported_constraints": {
+        "correct": 11,
+        "total": 12,
+        "present_correct": 5,
+        "present_total": 6,
+        "missing_correct": 6,
+        "missing_total": 6,
+        "accuracy": 0.9166666666666666,
+        "present_accuracy": 0.8333333333333334,
+        "missing_accuracy": 1.0
+      }
+    },
+    "empty_preferences_baseline_accuracy": 0.7272727272727273,
+    "errors": [
+      {
+        "id": "discovery_07_2",
+        "text": "Find not spicy noodles.",
+        "differences": {
+          "unsupported_constraints": {
+            "expected": [
+              "spice level"
+            ],
+            "predicted": [
+              "spice level: spicy",
+              "excluded food or dietary preference: not spicy noodles"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "extraction_clarifications_on_annotated_requests": 0,
+  "intent_errors": [
+    {
+      "id": "information_01_3",
+      "group_id": "information_01",
+      "text": "I would like a definition of biryani.",
+      "expected_intent": "information",
+      "raw_intent": "information",
+      "guarded_intent": "clarification",
+      "final_intent": "clarification",
+      "status": "clarification",
+      "intent_details": {
+        "raw_intent": "information",
+        "raw_probability": 0.2297697980536188,
+        "clarification_threshold": 0.25,
+        "reason": "low_model_evidence"
+      },
+      "recommendation_id": null,
+      "expected_preferences": null,
+      "predicted_preferences": {
+        "domain": "food",
+        "dish": "biryani",
+        "cuisine": null,
+        "dietary_preference": null,
+        "location": null,
+        "budget": null,
+        "delivery_limit": null,
+        "min_rating": null,
+        "prefer_high_rating": null,
+        "priority": null,
+        "unsupported_constraints": []
+      }
+    },
+    {
+      "id": "clarification_02_2",
+      "group_id": "clarification_02",
+      "text": "The other one would be fine.",
+      "expected_intent": "clarification",
+      "raw_intent": "information",
+      "guarded_intent": "information",
+      "final_intent": "information",
+      "status": "information",
+      "intent_details": {
+        "raw_intent": "information",
+        "raw_probability": 0.2880247843486851,
+        "clarification_threshold": 0.25,
+        "reason": "model_prediction"
+      },
+      "recommendation_id": null,
+      "expected_preferences": null,
+      "predicted_preferences": {
+        "domain": null,
+        "dish": null,
+        "cuisine": null,
+        "dietary_preference": null,
+        "location": null,
+        "budget": null,
+        "delivery_limit": null,
+        "min_rating": null,
+        "prefer_high_rating": null,
+        "priority": null,
+        "unsupported_constraints": []
+      }
+    }
+  ],
+  "policy": "No fitting, model selection, threshold changes, or runtime rule changes are performed by this evaluator."
+}
