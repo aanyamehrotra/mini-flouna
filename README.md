@@ -6,7 +6,7 @@ The goal is to understand a natural-language request, extract explicitly stated 
 
 ## Current status
 
-The project includes shared schemas, 30 fictional food options, rule-based preference extraction, constraint filtering, reproducible ranking, factual explanations, and a command-line demo. Automated intent classification, the API, labelled requests, and evaluation results will be added in subsequent commits. The baseline requires the caller to supply Discovery or Decision intent explicitly.
+The project includes shared schemas, 30 fictional food options, rule-based preference extraction, constraint filtering, reproducible ranking, factual explanations, a command-line demo, and 150 labelled requests with frozen evaluation splits. Automated intent classification, the API, and evaluation results will be added in subsequent commits. The baseline requires the caller to supply Discovery or Decision intent explicitly.
 
 ## Planned approach
 
@@ -93,10 +93,10 @@ Extraction is deliberately rule-based and does not understand unrestricted Engli
 
 ## Planned evaluation
 
-Target at least 100 reviewed labelled requests covering all five intents, including ambiguous wording, negation, missing preferences, and difficult non-Action examples. Keep related paraphrases in the same split and fit text features on training data only.
+The dataset contains 150 synthetic labelled requests across five intents, including ambiguous wording, negation, missing preferences, and difficult non-Action examples. Sixty also have gold preference annotations. The fixed split is 90 training / 30 validation / 30 test requests, with related paraphrases kept together. See [the dataset card](data/REQUESTS.md) for labelling rules, provenance, limitations, and split verification. Fit text features on training data only.
 
 Report accuracy, per-class precision/recall/F1, macro F1, a confusion matrix, false Action predictions, and extraction accuracy. Tests will also check constraint boundaries, no-match responses, unsupported information, reproducibility, and cases where the cheapest option is not the best fit.
 
 ## AI assistance and data sources
 
-OpenAI Codex assisted with the project plan, repository setup, schemas, catalogue creation and loading, extraction rules, ranking implementation, command-line demo, documentation, and tests. All catalogue records are fictional; their definitions and limitations are documented in `data/README.md`. No trained model, labelled request dataset, external API integration, or ML evaluation results are included yet. Further data generation, augmentation, and AI usage will be documented as those components are added.
+OpenAI Codex assisted with the project plan, repository setup, schemas, catalogue creation and loading, extraction rules, ranking implementation, command-line demo, labelled request authorship and annotation, split preparation, documentation, and tests. All catalogue records and requests are synthetic; provenance and limitations are documented in `data/README.md` and `data/REQUESTS.md`. Labels were AI-authored and AI-reviewed, not independently human-annotated. No trained model, external API integration, or ML evaluation results are included yet. Further AI usage will be documented as components are added.
